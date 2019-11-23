@@ -1,0 +1,118 @@
+{
+  "paragraphs": [
+    {
+      "title": "",
+      "text": "%pyspark\nfrom pyspark import SparkFiles\n# Load in user_data.csv from S3 into a DataFrame\nurl \u003d \"https://winescores.s3.amazonaws.com/WineModel.csv\"\nspark.sparkContext.addFile(url)\n\nwine_df \u003d spark.read.option(\u0027header\u0027, \u0027true\u0027).csv(SparkFiles.get(\"WineModel.csv\"), inferSchema\u003dTrue, sep\u003d\u0027,\u0027)\nwine_df \u003d wine_df.withColumnRenamed(\"_c0\", \"rowid\")\nwine_df.show(10)",
+      "user": "",
+      "dateUpdated": "Nov 20, 2019 1:19:57 AM",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "selectedInterpreter": {
+          "name": "spark.pyspark",
+          "profile": "pyspark",
+          "isCustom": false,
+          "editorLanguage": "python",
+          "className": "org.apache.zeppelin.spark.PySparkInterpreter",
+          "isDefault": false
+        },
+        "colWidth": 12.0,
+        "editorHide": false,
+        "results": [
+          {}
+        ]
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "data": "+-----+-------------+----------------+-----------+--------------+---------+-------------------+--------------------+-------+----+---------+-------+---+-------+--------+\n|rowid|fixed acidity|volatile acidity|citric acid|residual sugar|chlorides|free sulfur dioxide|total sulfur dioxide|density|  pH|sulphates|alcohol|qal|quality|bucketed|\n+-----+-------------+----------------+-----------+--------------+---------+-------------------+--------------------+-------+----+---------+-------+---+-------+--------+\n|    0|          7.4|             0.7|        0.0|           1.9|    0.076|               11.0|                34.0| 0.9978|3.51|     0.56|    9.4|  0|      5|  medium|\n|    1|          7.8|            0.88|        0.0|           2.6|    0.098|               25.0|                67.0| 0.9968| 3.2|     0.68|    9.8|  0|      5|  medium|\n|    2|          7.8|            0.76|       0.04|           2.3|    0.092|               15.0|                54.0|  0.997|3.26|     0.65|    9.8|  0|      5|  medium|\n|    3|         11.2|            0.28|       0.56|           1.9|    0.075|               17.0|                60.0|  0.998|3.16|     0.58|    9.8|  1|      6|  medium|\n|    4|          7.4|             0.7|        0.0|           1.9|    0.076|               11.0|                34.0| 0.9978|3.51|     0.56|    9.4|  0|      5|  medium|\n|    5|          7.4|            0.66|        0.0|           1.8|    0.075|               13.0|                40.0| 0.9978|3.51|     0.56|    9.4|  0|      5|  medium|\n|    6|          7.9|             0.6|       0.06|           1.6|    0.069|               15.0|                59.0| 0.9964| 3.3|     0.46|    9.4|  0|      5|  medium|\n|    7|          7.3|            0.65|        0.0|           1.2|    0.065|               15.0|                21.0| 0.9946|3.39|     0.47|   10.0|  1|      7|  medium|\n|    8|          7.8|            0.58|       0.02|           2.0|    0.073|                9.0|                18.0| 0.9968|3.36|     0.57|    9.5|  1|      7|  medium|\n|    9|          7.5|             0.5|       0.36|           6.1|    0.071|               17.0|               102.0| 0.9978|3.35|      0.8|   10.5|  0|      5|  medium|\n+-----+-------------+----------------+-----------+--------------+---------+-------------------+--------------------+-------+----+---------+-------+---+-------+--------+\nonly showing top 10 rows\n\n",
+            "type": "TEXT"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "",
+      "id": "20191120-004738_550265451",
+      "dateCreated": "Nov 20, 2019 12:47:38 AM",
+      "dateStarted": "Nov 20, 2019 1:19:57 AM",
+      "dateFinished": "Nov 20, 2019 1:19:57 AM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 0
+    },
+    {
+      "title": "",
+      "text": "%pyspark\n# Load in a sql function to use columns\nfrom pyspark.sql.functions import col\n\n# Configure settings for RDS\nmode \u003d \"append\"\njdbc_url\u003d\"jdbc:postgresql://database-1.cv3ope2qtvmb.us-east-1.rds.amazonaws.com:5432/postgres\"\nconfig \u003d {\"user\":\"postgres\", \n          \"password\": \"Geeta123\", \n          \"driver\":\"org.postgresql.Driver\"}\n          \nwine_df.write.jdbc(url\u003djdbc_url, table\u003d\u0027WineQuality\u0027, mode\u003dmode, properties\u003dconfig)",
+      "user": "",
+      "dateUpdated": "Nov 20, 2019 1:20:13 AM",
+      "config": {
+        "selectedInterpreter": {
+          "name": "spark.pyspark",
+          "profile": "pyspark",
+          "isCustom": false,
+          "editorLanguage": "python",
+          "className": "org.apache.zeppelin.spark.PySparkInterpreter",
+          "isDefault": false
+        },
+        "colWidth": 12.0,
+        "results": [],
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "jobName": "",
+      "id": "20191120-004855_851708815",
+      "dateCreated": "Nov 20, 2019 12:48:55 AM",
+      "dateStarted": "Nov 20, 2019 1:20:10 AM",
+      "dateFinished": "Nov 20, 2019 1:20:13 AM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 0
+    },
+    {
+      "title": "",
+      "text": "",
+      "user": "",
+      "dateUpdated": "Nov 20, 2019 12:52:03 AM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "",
+      "id": "20191120-005203_1527838894",
+      "dateCreated": "Nov 20, 2019 12:52:03 AM",
+      "dateStarted": "Nov 23, 2019 1:27:26 AM",
+      "dateFinished": "Nov 23, 2019 1:27:26 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 0
+    }
+  ],
+  "name": "WineQuality",
+  "id": "f78b4aebe5604b64b63889319c6148d3",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {},
+  "info": {}
+}
